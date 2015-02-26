@@ -45,7 +45,36 @@ echo 'Zamówionych części:  '.$ilosc. '<br />';
 		if ($iloscswiec > 0 )
 			echo $iloscswiec. ' Świec zapłonowych<br />' ;
 	}
+//Utworzenie tablicy. Dodatkowo kluczem (id) będzie nazwa produktu, a wartością jego cena
+$produkty = array('Opony'=>100, 'Olej'=>10, 'Świece zapłonowe'=>4);
+echo '<p>' . "$produkty[0] $produkty[1]" . '</p>';
 
+// Czwarty produkt zdefiniowany jako kolejna iteracja wygląda tak:
+$produkty[4] = 'Bezpieczeniki'; 
+echo '<p>' . $produkty[4] . '</p>';
+echo '<br />';
+
+//Ale my chcemy, żeby kluczem była nazwa, więc tworzymy tablicę ceny:
+$ceny = array('Opony'==>100);
+$ceny['Olej'] = 10; // A teraz do tablicy jednoelementowej dodajemy kolejne elementy
+$ceny['Świece'] = 4;
+echo '<br />';
+
+
+//A teraz wyświetlamy tablicę za pomocą pętli for:
+for ($i = 0; $i <3; $i++)	{
+	echo $produkty[$i] . " ";
+}
+echo '<br />';
+
+//A teraz pętla foreach (stworzona do tablic - nie trzeba deklarować liczby iteracji!):
+foreach($produkty as $biezacy) {
+	echo $biezacy . " ";
+}
+echo '<br />';
+echo '<br />';
+
+//
 $wartosc = 0.00;
 define ('CENAOPON', 100);
 define ('CENAOLEJU', 10);
@@ -53,6 +82,9 @@ define ('CENASWIEC', 4);
 $wartosc = $iloscopon * CENAOPON
 			+ $iloscoleju * CENAOLEJU
 			+ $iloscswiec * CENASWIEC;
+			
+			
+
 // System zniżek
 	if ($iloscopon < 10)
 		$znizka = 0.00;
