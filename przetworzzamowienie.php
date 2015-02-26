@@ -1,28 +1,33 @@
-﻿<html>
- <meta charset="UTF-8"> 
+﻿
 <?php
 // Utworzenie krótkich nazw zmiennych
 $iloscopon = $_POST['iloscopon'];
 $iloscoleju = $_POST['iloscoleju'];
 $iloscswiec = $_POST['iloscswiec']; 
 $jak = $_POST['jak'];
+$adres = $_POST['adres'];
+$DOCUMENT_ROOT = $_SERVER['DOCUMENT_ROOT'];
+$data = date('H:i. jS F Y');
 /*
-	echo 'isset($iloscopon): '.isset($iloscopon).'<br />';
-	echo 'isset($niema): '. isset($niema). '<br />';
-	echo 'empty($iloscopon): '.empty($iloscopon).'<br />';
-	echo 'empty($niema): '.empty($niema).'<br />';
-	*/
+echo 'isset($iloscopon): '.isset($iloscopon).'<br />';
+echo 'isset($niema): '. isset($niema). '<br />';
+echo 'empty($iloscopon): '.empty($iloscopon).'<br />';
+echo 'empty($niema): '.empty($niema).'<br />';
+*/
 ?>
 
+<html>
+ <meta charset="UTF-8"> 
 <head>
       <title>Części samochodowe Janka - wyniki zamówienia</title>
 </head>
 <body>
 <h1>Części samochodwe Janka</h1>
 <h2>Wyniki zamówienia</h2>
+
 <?php
-echo '<p>Zamówienie przyjęte o ' . date('H:i, jS F Y') . '</p>';
-echo '<p> Zamówienie wygląda następująco:</p>' ;
+echo '<p>Zamówienie przyjęte o ' . $data.'</p>';
+echo '<p> Zamówienie wygląda następująco:</p>';
 
 $ilosc = 0;
 $ilosc = $iloscopon + $iloscoleju + $iloscswiec;
@@ -65,7 +70,9 @@ $wartosc = $iloscopon * CENAOPON
 			echo 'Cena brutto wynosi: '.number_format($wartosc, 2). ' PLN<br />';
 			$wartoscpoznizkach = $wartosc * (1 - $znizka);
 			echo 'Cena po zniżkach wynosi: '.number_format($wartoscpoznizkach, 2).' PLN</br />';
+			echo '<p>Adres wysyłki: ' .$adres .'</p>';
 			
+/*			
 //Wyniki ankiety #1
 if ($jak == "a") {
 	echo '<p>Stały klient</p>';
@@ -97,7 +104,25 @@ echo '<p style="color:red">Źródło wiedyz o sklepie:</p> ';
 			echo '<p>Źródło nieznane</p>';
 			break;
 	}
+*/
 
+//Ciąg wyjściowy:
+			$ciagwyjsciowy = $data . "\t" . $iloscopon . " opon \t" . $iloscoleju . " butelek oleju \t" . $iloscswiec . " swiec \t" . $wartosc . " PLN \t" . $adres . " \n";
+
+//Otwarcie pliku, żeby dopisać do niego zamówienia:
+@ $wp = fopen("$DOCUMENT_ROOT/../zamowienia/zamowienia.txt", 'ab');
+flock($wp, LOCK_EX); //blokada zapisu pliku - otwarcie na wyłączoność
+
+if (!$wp) {
+	echo '<p><strong>Zamówienie nie może być przyjęte. Prosimy spróbować później.</strong></p></body></html>';
+	exit;
+}
+
+fwrite($wp, $ciagwyjsciowy, strlen($ciagwyjsciowy));
+flock($wp, LOCK_UN); //zdjęcie blokady zapisu
+fclose($wp);
+
+echo '<p>Zamówienie przyjęte i zapisane. </p>';
 ?>
 
 </body>
