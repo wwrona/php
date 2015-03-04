@@ -55,7 +55,7 @@ echo '<p>' . $produkty[4] . '</p>';
 echo '<br />';
 
 //Ale my chcemy, żeby kluczem była nazwa, więc tworzymy tablicę ceny:
-$ceny = array('Opony'==>100);
+$ceny = array('Opony'=>100);
 $ceny['Olej'] = 10; // A teraz do tablicy jednoelementowej dodajemy kolejne elementy
 $ceny['Świece'] = 4;
 echo '<br />';
@@ -73,6 +73,81 @@ foreach($produkty as $biezacy) {
 }
 echo '<br />';
 echo '<br />';
+
+// Pętla foreach wyświetaljaca obiekty wraz z przypisanymi wartościami:
+// foreach ($ceny as $klucz => $wartosc) {
+// echo "UNO " . $klucz. " - ". $wartosc . "<br />";
+// }
+
+
+/* CZEMU TO NIE DZIAŁA?
+while($element = each($ceny)) {
+	echo "DUO " . $element['klucz'];
+	echo " - ";
+	echo $element['wartosc'];
+	echo "<br />";
+}
+*/
+
+// Wyświetlenie tablicy przy pomocy list
+while (list($produkt, $cena) = each($ceny)) {
+	echo "NEO - $produkt - $cena<br />";
+}
+
+// Ponowne zastosowanie funkcji each bez resetu nie zadziała, bo tablica zapamięta element bieżący i nie przejdzie ponownie przez całość
+reset($ceny);
+while (list($produkt, $cena) = each($ceny)) {
+	echo "DUO - $produkt - $cena<br />";
+}
+
+// Tworzenie tablicy dwuwymiarowej:
+$produkty2 = array(array('OPO', 'Opony', '100'),
+					array('OLE', 'Oleje', '10'),
+					array('SWI', 'Świece', '4'));
+					//A teraz wyświetlanie zawartości - podajemy identyfikator wiersza i kolumny:
+					echo '|' . $produkty2[0][0] . '|' . $produkty2[0][1] . '|' . $produkty2[0][2] . '|<br />';
+					echo '|' . $produkty2[1][0] . '|' . $produkty2[1][1] . '|' . $produkty2[1][2] . '|<br />';
+					
+					//To samo możemy osiągnać za pomocą pętli for:
+					for ($rzad = 0; $rzad <3; $rzad++) {
+						for ($kolumna = 0; $kolumna <3; $kolumna++) {
+							echo '|' . $produkty2[$rzad][$kolumna];
+						}
+						echo '<br />';
+					}
+
+//Zamiast wartości numerycznych w tabeli dwuwymiarowej możemy też zastosowac oznaczenia wyrazowe:
+$produkty3 = array (array ('Kod' => 'OPO', 'Opis' => 'Opony', 'Cena' => 100),
+					array ('Kod' => 'OLE', 'Opis' => 'Oleje', 'Cena' => 10));
+					//Jeśli jednak skorzystamy z takiej możliwości to nie będziemy mogli użyć pętli for (patrz wyżej). Zamiast tego, np:
+					for ($rzad = 0; $rzad <3; $rzad++) {
+						echo '|TRE' . $produkty3[$rzad]['Kod'] . '|' . $produkty3[$rzad]['Opis'] . '|' . $produkty3[$rzad]['Cena'] . '|<br />';
+					}
+					
+
+// A teraz tablica trójwymiarowa: części te same ale do różnych kategorii pojazdów:
+$kategorie = array( array( array('OSO_OPO', 'Opony', 100).
+							array('OSO_OLE', 'Oleje', 10),
+							array('OSO_SWI', 'Swiece', 4)
+								),
+				    array (array('VAN_OPO', 'Opony', 120),
+							array('VAN_OLE', 'Oleje', 12),
+							array('VAN_SWI', 'Swiece', 5)
+								),
+					array (array('CIE_OPO', 'Opony', 150),
+							array('CIE_OLE', "Oleje", 15),
+							array('CIE_SWI', 'Swiece', 6)
+								));
+	//wyświetlamy zawartość tablicy przy użyciu pętli for (bo ma indeksy numeryczne - nie zmienialiśmy nic):
+	for ($warstwa = 0; $warstwa < 3; $warstwa++) {
+		echo "Warstwa $warstwa<br />";
+		for ($rzad = 0; $rzad < 3; $rzad++) {
+			for ($kolumna = 0; $kolumna < 3; $kolumna++) {
+				echo '|'.$kategorie[$warstwa][$rzad][$kolumna];
+			}
+			echo '|<br />';
+			}
+		}
 
 //
 $wartosc = 0.00;

@@ -65,6 +65,17 @@ echo '<br />';
 flock($wp, LOCK_UN); //zdjęcie blokady
 fclose($wp);
 
+//Powyższe można też osiągnąć dzięki funkcji file:
+echo 'Druga próba';
+$zamowienia = file("$DOCUMENT_ROOT/../zamowienia/zamowienia.txt");
+$ilosc_zamowien = count($zamowienia);
+if (ilosc_zamowien == 0) {
+	echo 'Brak zamówień';
+}
+for ($i = 0; $i <$ilosc_zamowien; $i++) {
+	echo $zamowienia[$i] . "<br />";
+}
+
 ?>
 </body>
 </html>
